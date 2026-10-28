@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <title>تطبيق المحاكاة الصيدلانية</title>
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@gradio/lite/dist/lite.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gradio/lite/dist/lite.css" />
+</head>
+<body>
+    <gradio-lite>
+import gradio as gr
+
+def check_drug_interaction(drug_a, drug_b):
+    if not drug_a or not drug_b:
+        return "يرجى إدخال اسم الدوائين للفحص."
+    if "cipro" in drug_a.lower() and "milk" in drug_b.lower():
+        return "🚨 **درجة الخطورة:** عالٍ (High)\n\n⚠️ **الأثر السريري:** يقلل الكالسيوم من امتصاص السيبرو بنسبة تصل إلى 50%.\n\n💡 **التوصية:** تناول السيبرو قبل الحليب بساعتين أو بعده بـ 4 ساعات."
+    return "✅ لم يتم العثور على تداخل خطير مسجل بين الدوائين."
+
+def calculate_pediatric_dose(weight, dose_per_kg):
+    try:
+        w = float(weight)
+        d = float(dose_per_kg)
+        total = w * d
+        return f"📊 **إجمالي الجرعة اليومية:** {total:.1f} ملجم/يوم (مقسّمة على الجرعات اليومية)."
+    except ValueError:
+        return "يرجى إدخال أرقام صحيحة للوزن والجرعة."
+
+with gr.Blocks(theme=gr.themes.Soft()) as demo:
+    gr.Markdown("# 💊 تطبيق المحاكاة الصيدلانية والتثقيف الدوائي")
+    
+    with gr.Tabs():
+        with gr.TabItem("🔍 فاحص التداخلات الدوائية"):
+            d1 = gr.Textbox(label="الدواء الأول (أو الغذاء)", placeholder="مثال: Cipro")
+            d2 = gr.Textbox(label="الدواء الثاني (أو الغذاء)", placeholder="مثال: Milk")
+            btn1 = gr.Button("فحص التداخل", variant="primary")
+            out1 = gr.Markdown()
+            btn1.click(check_drug_interaction, inputs=[d1, d2], outputs=[out1])
+            
+        with gr.TabItem("🧮 حاسبة الجرعات للأطفال"):
+            w_in = gr.Textbox(label="وزن الطفل (kg)")
+            d_in = gr.Textbox(label="الجرعة (mg/kg/day)")
+            btn2 = gr.Button("حساب الجرعة", variant="primary")
+            out2 = gr.Markdown()
+            btn2.click(calculate_pediatric_dose, inputs=[w_in, d_in], outputs=[out2])
+
+demo.launch()
+    </gradio-lite>
+</body>
+</html>
