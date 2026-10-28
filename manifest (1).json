@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Pharma Simulator",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Pharma",
+  "start_url": "maxsaeed6-eng.github.io",
+  "theme_color": "#ffffff",
+  "id": "/pharma-simulator/",
+  "description": "تطبيق المحاكاة الصيدلانية والتثقيف الدوائي"
+}
